@@ -12,6 +12,15 @@
 		DC000005271F000000000001 /* VideoProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000006271F000000000001 /* VideoProcessor.swift */; };
 		DC000017271F000000000001 /* ComparisonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000018271F000000000001 /* ComparisonView.swift */; };
 		DC000019271F000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC000020271F000000000001 /* Assets.xcassets */; };
+		DC000021271F000000000001 /* VivaraDesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000022271F000000000001 /* VivaraDesignSystem.swift */; };
+		DC000023271F000000000001 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000024271F000000000001 /* SplashView.swift */; };
+		DC000025271F000000000001 /* PresetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000026271F000000000001 /* PresetManager.swift */; };
+		DC000027271F000000000001 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000028271F000000000001 /* MainView.swift */; };
+		DC000029271F000000000001 /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000030271F000000000001 /* ProcessingView.swift */; };
+		DC000031271F000000000001 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000032271F000000000001 /* CompletionView.swift */; };
+		DC000033271F000000000001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000034271F000000000001 /* SettingsView.swift */; };
+		DC000035271F000000000001 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000036271F000000000001 /* OnboardingView.swift */; };
+		DC000037271F000000000001 /* SharedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC000038271F000000000001 /* SharedTypes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +31,15 @@
 		DC000008271F000000000001 /* Vivara.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vivara.entitlements; sourceTree = "<group>"; };
 		DC000018271F000000000001 /* ComparisonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonView.swift; sourceTree = "<group>"; };
 		DC000020271F000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DC000022271F000000000001 /* VivaraDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VivaraDesignSystem.swift; sourceTree = "<group>"; };
+		DC000024271F000000000001 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		DC000026271F000000000001 /* PresetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManager.swift; sourceTree = "<group>"; };
+		DC000028271F000000000001 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		DC000030271F000000000001 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
+		DC000032271F000000000001 /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
+		DC000034271F000000000001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		DC000036271F000000000001 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		DC000038271F000000000001 /* SharedTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTypes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,9 +65,18 @@
 			isa = PBXGroup;
 			children = (
 				DC000002271F000000000001 /* VivaraApp.swift */,
+				DC000022271F000000000001 /* VivaraDesignSystem.swift */,
+				DC000038271F000000000001 /* SharedTypes.swift */,
+				DC000026271F000000000001 /* PresetManager.swift */,
+				DC000024271F000000000001 /* SplashView.swift */,
+				DC000036271F000000000001 /* OnboardingView.swift */,
+				DC000028271F000000000001 /* MainView.swift */,
+				DC000030271F000000000001 /* ProcessingView.swift */,
+				DC000032271F000000000001 /* CompletionView.swift */,
+				DC000018271F000000000001 /* ComparisonView.swift */,
+				DC000034271F000000000001 /* SettingsView.swift */,
 				DC000004271F000000000001 /* ContentView.swift */,
 				DC000006271F000000000001 /* VideoProcessor.swift */,
-				DC000018271F000000000001 /* ComparisonView.swift */,
 				DC000020271F000000000001 /* Assets.xcassets */,
 				DC000008271F000000000001 /* Vivara.entitlements */,
 			);
@@ -134,9 +161,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC000001271F000000000001 /* VivaraApp.swift in Sources */,
+				DC000021271F000000000001 /* VivaraDesignSystem.swift in Sources */,
+				DC000037271F000000000001 /* SharedTypes.swift in Sources */,
+				DC000025271F000000000001 /* PresetManager.swift in Sources */,
+				DC000023271F000000000001 /* SplashView.swift in Sources */,
+				DC000035271F000000000001 /* OnboardingView.swift in Sources */,
+				DC000027271F000000000001 /* MainView.swift in Sources */,
+				DC000029271F000000000001 /* ProcessingView.swift in Sources */,
+				DC000031271F000000000001 /* CompletionView.swift in Sources */,
+				DC000017271F000000000001 /* ComparisonView.swift in Sources */,
+				DC000033271F000000000001 /* SettingsView.swift in Sources */,
 				DC000003271F000000000001 /* ContentView.swift in Sources */,
 				DC000005271F000000000001 /* VideoProcessor.swift in Sources */,
-				DC000017271F000000000001 /* ComparisonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

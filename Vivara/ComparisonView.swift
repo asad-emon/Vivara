@@ -10,80 +10,125 @@ struct ComparisonView: View {
     @State private var player: AVPlayer?
     @State private var originalPlayer: AVPlayer?
     @State private var isPlaying = true
+    @State private var sliderPosition: CGFloat = 0.5
 
     var body: some View {
         NavigationStack {
             ZStack {
+                // Cinematic black background
                 Color.black.ignoresSafeArea()
 
-                // Processed video (bottom layer - always visible when not pressing)
-                VideoPlayerView(player: player)
-                    .opacity(showingOriginal ? 0 : 1)
+                GeometryReader { geometry in
+                    ZStack {
+                        // Processed video (right side / bottom layer)
+                        VideoPlayerView(player: player)
 
-                // Original video (top layer - visible when pressing)
-                VideoPlayerView(player: originalPlayer)
-                    .opacity(showingOriginal ? 1 : 0)
+                        // Original video with mask (left side)
+                        VideoPlayerView(player: originalPlayer)
+                            .mask(
+                                HStack(spacing: 0) {
+                                    Rectangle()
+                                        .frame(width: geometry.size.width * sliderPosition)
+                                    Color.clear
+                                }
+                            )
 
-                // Label showing which version
-                VStack {
-                    HStack {
-                        Text(showingOriginal ? "ORIGINAL" : "PROCESSED")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(.ultraThinMaterial)
-                            .cornerRadius(8)
-                        Spacer()
+                        // Divider line
+                        Rectangle()
+                            .fill(LinearGradient.brand)
+                            .frame(width: 4)
+                            .position(x: geometry.size.width * sliderPosition, y: geometry.size.height / 2)
+                            .shadow(color: .electricCoral.opacity(0.5), radius: 8)
+
+                        // Drag handle
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 40, height: 40)
+                            .overlay(
+                                HStack(spacing: 2) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 10, weight: .bold))
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 10, weight: .bold))
+                                }
+                                .foregroundColor(.charcoalGray)
+                            )
+                            .shadow(color: .black.opacity(0.3), radius: 8)
+                            .position(x: geometry.size.width * sliderPosition, y: geometry.size.height / 2)
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        let newPosition = value.location.x / geometry.size.width
+                                        sliderPosition = max(0.1, min(0.9, newPosition))
+                                        HapticManager.selection()
+                                    }
+                            )
+
+                        // Labels
+                        VStack {
+                            HStack {
+                                // Original label
+                                Text("ORIGINAL")
+                                    .font(.captionMedium)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.black.opacity(0.6))
+                                    .cornerRadius(8)
+                                    .padding(16)
+
+                                Spacer()
+
+                                // Processed label
+                                Text("PROCESSED")
+                                    .font(.captionMedium)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        LinearGradient.brand.opacity(0.8)
+                                    )
+                                    .cornerRadius(8)
+                                    .padding(16)
+                            }
+
+                            Spacer()
+                        }
                     }
-                    .padding()
+                }
 
+                // Bottom controls
+                VStack {
                     Spacer()
 
-                    // Hold to compare button
-                    Button {
-                        // Toggle play/pause on tap
-                        if isPlaying {
-                            player?.pause()
-                            originalPlayer?.pause()
-                        } else {
-                            player?.play()
-                            originalPlayer?.play()
+                    VStack(spacing: 16) {
+                        // Play/Pause button
+                        Button {
+                            togglePlayback()
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                                Text(isPlaying ? "Pause" : "Play")
+                            }
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(24)
                         }
-                        isPlaying.toggle()
-                    } label: {
-                        HStack {
-                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                            Text(isPlaying ? "Pause" : "Play")
-                        }
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(12)
-                    }
-                    .padding(.bottom, 8)
 
-                    // Hold to see original
-                    Text("Hold to see original")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(20)
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { _ in
-                                    showingOriginal = true
-                                }
-                                .onEnded { _ in
-                                    showingOriginal = false
-                                }
-                        )
-                        .padding(.bottom, 30)
+                        // Instruction
+                        Text("Drag to compare")
+                            .font(.captionMedium)
+                            .foregroundColor(.white.opacity(0.7))
+                    }
+                    .padding(.bottom, 50)
                 }
             }
             .navigationTitle("Compare")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
@@ -91,6 +136,8 @@ struct ComparisonView: View {
                         originalPlayer?.pause()
                         onDismiss()
                     }
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(.electricCoral)
                 }
             }
             .onAppear {
@@ -111,7 +158,7 @@ struct ComparisonView: View {
 
         // Setup original video player
         let origPlayer = AVPlayer(url: originalURL)
-        origPlayer.isMuted = true // Mute original to avoid double audio
+        origPlayer.isMuted = true
         self.originalPlayer = origPlayer
 
         // Loop both videos
@@ -130,20 +177,30 @@ struct ComparisonView: View {
         processedPlayer.play()
         origPlayer.play()
 
-        // Sync the players
+        // Sync players periodically
         syncPlayers()
+    }
+
+    private func togglePlayback() {
+        HapticManager.impact(.light)
+        if isPlaying {
+            player?.pause()
+            originalPlayer?.pause()
+        } else {
+            player?.play()
+            originalPlayer?.play()
+        }
+        isPlaying.toggle()
     }
 
     private func syncPlayers() {
         guard let player, let originalPlayer else { return }
 
-        // Periodically sync the original player to the processed player
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             guard self.isPlaying else { return }
             let currentTime = player.currentTime()
             let originalTime = originalPlayer.currentTime()
 
-            // If they're more than 0.1 seconds apart, sync them
             let diff = abs(currentTime.seconds - originalTime.seconds)
             if diff > 0.1 {
                 originalPlayer.seek(to: currentTime, toleranceBefore: .zero, toleranceAfter: .zero)
@@ -152,45 +209,7 @@ struct ComparisonView: View {
     }
 }
 
-// Simple video player view using AVPlayerLayer
-struct VideoPlayerView: UIViewRepresentable {
-    let player: AVPlayer?
-
-    func makeUIView(context: Context) -> PlayerUIView {
-        let view = PlayerUIView()
-        view.player = player
-        return view
-    }
-
-    func updateUIView(_ uiView: PlayerUIView, context: Context) {
-        uiView.player = player
-    }
-}
-
-class PlayerUIView: UIView {
-    var player: AVPlayer? {
-        get { playerLayer.player }
-        set { playerLayer.player = newValue }
-    }
-
-    var playerLayer: AVPlayerLayer {
-        return layer as! AVPlayerLayer
-    }
-
-    override static var layerClass: AnyClass {
-        return AVPlayerLayer.self
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        playerLayer.videoGravity = .resizeAspect
-        backgroundColor = .black
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
+// MARK: - Preview
 
 #Preview {
     ComparisonView(

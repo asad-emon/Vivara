@@ -186,35 +186,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Video Transferable
-
-struct VideoTransferable: Transferable {
-    let url: URL
-
-    static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(contentType: .movie) { video in
-            SentTransferredFile(video.url)
-        } importing: { received in
-            let tempURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(received.file.lastPathComponent)
-            try? FileManager.default.removeItem(at: tempURL)
-            try FileManager.default.copyItem(at: received.file, to: tempURL)
-            return Self(url: tempURL)
-        }
-    }
-}
-
-// MARK: - Share Sheet
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
+// Note: VideoTransferable and ShareSheet are now in SharedTypes.swift
 
 #Preview {
     ContentView()
