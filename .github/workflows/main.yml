@@ -1,6 +1,9 @@
 name: Build iOS `.ipa`
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -33,7 +36,8 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath $PWD/build/Vivara.xcarchive \
             -exportPath $PWD/build \
-            -exportOptionsPlist ExportOptions.plist
+            -exportOptionsPlist ExportOptions.plist \
+            CODE_SIGNING_ALLOWED=NO
 
       # Step 5: Upload .ipa File
       - name: Upload .ipa File
