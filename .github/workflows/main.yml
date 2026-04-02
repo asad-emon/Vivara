@@ -1,0 +1,46 @@
+name: Build iOS App
+
+# Manual Trigger
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS
+    runs-on: macos-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Xcode environment
+      - name: Set up Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+
+      # Step 3: Install dependencies (if using CocoaPods)
+      - name: Install CocoaPods
+        run: |
+          if [ -f "Podfile" ]; then
+            sudo gem install cocoapods
+            pod install
+          fi
+
+      # Step 4: Build the iOS application
+      - name: Build the app
+        run: |
+          xcodebuild clean build \
+            -workspace Vivara.xcworkspace \
+            -scheme Vivara \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 14' \
+            CODE_SIGNING_ALLOWED=NO
+
+      # Step 5: Archive the build (optional, for App Store or testing)
+      - name: Archive the app
+        run: |
+          xcodebuild archive \
+            -workspace Vivara.xcworkspace \
+            -scheme Vivara \
+            -archivePath $PWD/build/Vivara.xcarchive
