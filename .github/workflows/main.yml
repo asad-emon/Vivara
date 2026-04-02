@@ -20,7 +20,7 @@ jobs:
       - name: Set up Xcode
         run: |
           sudo xcode-select -s /Applications/Xcode.app
-
+          
       # Step 3: Archive the App
       - name: Archive the App
         run: |
@@ -28,7 +28,7 @@ jobs:
             -project Vivara.xcodeproj \
             -scheme Vivara \
             -archivePath $PWD/build/Vivara.xcarchive \
-            CODE_SIGNING_ALLOWED=NO
+            -allowProvisioningUpdates
             
       # Step 4: Export the IPA File
       - name: Export .ipa
@@ -37,8 +37,7 @@ jobs:
             -archivePath $PWD/build/Vivara.xcarchive \
             -exportPath $PWD/build \
             -exportOptionsPlist ExportOptions.plist \
-            -allowProvisioningUpdates \
-            CODE_SIGNING_ALLOWED=NO
+            -allowProvisioningUpdates
 
       # Step 5: Upload .ipa File
       - name: Upload .ipa File
