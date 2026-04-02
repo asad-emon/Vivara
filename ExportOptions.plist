@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>release-testing</string>
+    <string>development</string>
     <key>signingStyle</key>
     <string>automatic</string>
     <key>stripSwiftSymbols</key>
