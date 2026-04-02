@@ -9,7 +9,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # Step 1: Check out the code
+      # Step 1: Check out the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -18,24 +18,16 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode.app
 
-      # Step 3: Install dependencies (if using CocoaPods)
-      - name: Install CocoaPods
-        run: |
-          if [ -f "Podfile" ]; then
-            sudo gem install cocoapods
-            pod install
-          fi
-
-      # Step 4: Archive the App
+      # Step 3: Archive the App
       - name: Archive the App
         run: |
           xcodebuild clean archive \
-            -workspace Vivara.xcworkspace \
+            -project Vivara.xcodeproj \
             -scheme Vivara \
             -archivePath $PWD/build/Vivara.xcarchive \
             CODE_SIGNING_ALLOWED=NO
 
-      # Step 5: Export the IPA File
+      # Step 4: Export the IPA File
       - name: Export .ipa
         run: |
           xcodebuild -exportArchive \
@@ -43,9 +35,9 @@ jobs:
             -exportPath $PWD/build \
             -exportOptionsPlist ExportOptions.plist
 
-      # Step 6: Upload .ipa File
+      # Step 5: Upload .ipa File
       - name: Upload .ipa File
-        uses: actions/upload-artifact@v4 # Updated to v4
+        uses: actions/upload-artifact@v4
         with:
           name: Vivara.ipa
           path: build/*.ipa
