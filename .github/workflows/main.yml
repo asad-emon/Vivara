@@ -11,7 +11,7 @@ jobs:
     steps:
       # Step 1: Check out the code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Set up Xcode Environment
       - name: Set up Xcode
@@ -30,7 +30,7 @@ jobs:
       - name: Archive the App
         run: |
           xcodebuild clean archive \
-            -workspace Vivara.xcworkspace \ # Use .xcproject if you’re not using CocoaPods
+            -workspace Vivara.xcworkspace \
             -scheme Vivara \
             -archivePath $PWD/build/Vivara.xcarchive \
             CODE_SIGNING_ALLOWED=NO
@@ -43,9 +43,9 @@ jobs:
             -exportPath $PWD/build \
             -exportOptionsPlist ExportOptions.plist
 
-      # Step 6: Upload Build Artifacts
+      # Step 6: Upload .ipa File
       - name: Upload .ipa File
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # Updated to v4
         with:
           name: Vivara.ipa
           path: build/*.ipa
