@@ -1,11 +1,11 @@
-name: Build iOS App
+name: Build iOS `.ipa`
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build iOS
+    name: Archive and Export .ipa
     runs-on: macos-latest
 
     steps:
@@ -13,25 +13,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Xcode
+      # Step 2: Set up Xcode Environment
       - name: Set up Xcode
         run: |
           sudo xcode-select -s /Applications/Xcode.app
 
-      # Step 3: Build the iOS app using .xcodeproj
-      - name: Build the app
+      # Step 3: Install dependencies (if using CocoaPods)
+      - name: Install CocoaPods
         run: |
-          xcodebuild clean build \
-            -project Vivara.xcodeproj \
+          if [ -f "Podfile" ]; then
+            sudo gem install cocoapods
+            pod install
+          fi
+
+      # Step 4: Archive the App
+      - name: Archive the App
+        run: |
+          xcodebuild clean archive \
+            -workspace Vivara.xcworkspace \ # Use .xcproject if you’re not using CocoaPods
             -scheme Vivara \
-            -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 14' \
+            -archivePath $PWD/build/Vivara.xcarchive \
             CODE_SIGNING_ALLOWED=NO
 
-      # Step 4: Archive the build (optional)
-      - name: Archive the app
+      # Step 5: Export the IPA File
+      - name: Export .ipa
         run: |
-          xcodebuild archive \
-            -project Vivara.xcodeproj \
-            -scheme Vivara \
-            -archivePath $PWD/build/Vivara.xcarchive
+          xcodebuild -exportArchive \
+            -archivePath $PWD/build/Vivara.xcarchive \
+            -exportPath $PWD/build \
+            -exportOptionsPlist ExportOptions.plist
+
+      # Step 6: Upload Build Artifacts
+      - name: Upload .ipa File
+        uses: actions/upload-artifact@v3
+        with:
+          name: Vivara.ipa
+          path: build/*.ipa
